@@ -5,11 +5,7 @@ const Leftaside = () => {
   return (
     <div>
       <Suspense
-        fallback={
-          
-            <span className="loading loading-spinner loading-md"></span>
-        
-        }
+        fallback={<span className="loading loading-spinner loading-md"></span>}
       >
         <Categories></Categories>
       </Suspense>
