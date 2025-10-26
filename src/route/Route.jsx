@@ -2,6 +2,11 @@ import { createBrowserRouter } from "react-router";
 import Homelayout from "../layouts/Homelayout";
 import Homepage from "../page/Homepage";
 import CategoryNews from "../page/CategoryNews";
+import Login from "../page/Login";
+import Register from "../page/Register";
+import Authlayout from "../layouts/Authlayout";
+import NewsDetails from "../page/NewsDetails";
+import PrivateRoute from "../components/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -15,21 +20,48 @@ const router = createBrowserRouter([
       {
         path: "/category/:id",
         element: <CategoryNews></CategoryNews>,
-        loader:()=>fetch("/news.json")
+        loader: () => fetch("/news.json"),
+        hydrateFallbackElement: (
+          <div className="flex items-center justify-center min-h-screen">
+            <span className="loading loading-spinner loading-md"></span>
+          </div>
+        ),
       },
     ],
   },
   {
     path: "/auth",
-    element: <h1>Authentication layout</h1>,
+    element: <Authlayout></Authlayout>,
+    children: [
+      {
+        path: "/auth/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "/auth/register",
+        element: <Register></Register>,
+      },
+    ],
   },
   {
-    path: "/news",
-    element: <h1>News layout</h1>,
+    path: "/news-details/:id",
+    element: (
+      <PrivateRoute>
+        <NewsDetails></NewsDetails>
+      </PrivateRoute>
+    ),
+    loader: () => fetch("/news.json"),
+    hydrateFallbackElement: (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-spinner loading-md"></span>
+      </div>
+    ),
   },
   {
     path: "/*",
-    element: <h1>Error-404</h1>,
+    element: (
+      <h1 className="text-5xl font-bold text-center min-h-screen">Error-404</h1>
+    ),
   },
 ]);
 export default router;
